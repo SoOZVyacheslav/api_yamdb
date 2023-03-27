@@ -17,13 +17,15 @@ class User(AbstractUser):
         choices=USER_ROLES,
         default=USER,
         blank=False,
-        max_length=20
-    )
-    auth_code = models.CharField(
-        blank=True,
-        max_length=5
+        max_length=20,
+        verbose_name='Роль'
     )
     bio = models.CharField(
         blank=True,
-        max_length=1000
+        max_length=1000,
+        verbose_name='Биография'
+    )
+    email = models.EmailField(
+        unique=True,
+        verbose_name='Адрес электронной почты'
     )

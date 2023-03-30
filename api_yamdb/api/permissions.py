@@ -4,6 +4,19 @@ from rest_framework import permissions
 User = get_user_model()
 
 
+class IsAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated:
+            return bool(request.user.is_staff or request.user.role == 'admin')
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if request.user.is_authenticated:
+            return bool(request.user.is_staff or request.user.role == 'admin')
+
 class AdminOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
@@ -37,3 +50,4 @@ class AdminModeratorAuthorOnly(permissions.BasePermission):
                 or request.user.role == 'moderator'
                 or request.user.role == 'admin'
                 or obj.author == request.user)
+

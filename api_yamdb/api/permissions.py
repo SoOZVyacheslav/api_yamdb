@@ -51,4 +51,3 @@ class AdminModeratorAuthorOnly(permissions.BasePermission):
                 or request.user.role == 'moderator'
                 or request.user.role == 'admin'
                 or obj.author == request.user)
-

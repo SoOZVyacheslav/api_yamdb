@@ -7,22 +7,14 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
-
-from reviews.models import User, Review
+from reviews.models import Category, Genre, Review, Title, User
 
 from .permissions import (AdminModeratorAuthorOnly, AdminOnly,
                           IsAdminUserOrReadOnly)
-from .serializers import (ProfileSerializer, SignUpSerializer, TokenSerializer,
-                          UserSerializer, ReviewSerializer, CommentSerializer)
-
-from reviews.models import Category, Genre, Title, User
-
-from .permissions import (AdminModeratorAuthorOnly, AdminOnly, IsAdmin,
-                          IsAdminOrReadOnly, IsAdminUserOrReadOnly)
-from .serializers import (CategorySerializer, GenreSerializer,
-                          ProfileSerializer, SignUpSerializer, TitleSerializer,
-                          TokenSerializer, UserSerializer)
-
+from .serializers import (CategorySerializer, CommentSerializer,
+                          GenreSerializer, ProfileSerializer, ReviewSerializer,
+                          SignUpSerializer, TitleSerializer, TokenSerializer,
+                          UserSerializer)
 
 HTTP_METOD_NAMES = ['get', 'post', 'head', 'delete', 'patch']
 
@@ -146,7 +138,6 @@ class TitleViewSet(viewsets.ModelViewSet):
     serializer_class = TitleSerializer
     pagination_class = PageNumberPagination
     permission_classes = [IsAdminUserOrReadOnly]
-    filter_backends = [filters.SearchFilter]
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

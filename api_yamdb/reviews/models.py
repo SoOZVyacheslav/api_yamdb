@@ -29,3 +29,26 @@ class User(AbstractUser):
         unique=True,
         verbose_name='Адрес электронной почты'
     )
+    confirmation_code = models.CharField(
+        blank=True,
+        max_length=5
+    )
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+    def __str__(self) -> str:
+        return self.username
+
+    @property
+    def is_admin(self):
+        return self.role == 'admin'
+
+    @property
+    def is_moderator(self):
+        return self.role == 'moderator'
+
+    @property
+    def is_user(self):
+        return self.role == 'user'

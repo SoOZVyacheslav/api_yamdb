@@ -29,6 +29,17 @@ class User(AbstractUser):
         unique=True,
         verbose_name='Адрес электронной почты'
     )
+    confirmation_code = models.CharField(
+        blank=True,
+        max_length=5
+    )
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+    def __str__(self) -> str:
+        return self.username
 
 
 class Category(models.Model):
@@ -51,3 +62,5 @@ class Title(models.Model):
                                  on_delete=models.SET_NULL,
                                  blank=True, null=True,
                                  verbose_name='Категория')
+
+

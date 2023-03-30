@@ -3,14 +3,17 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, permissions, status, viewsets
-from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 from reviews.models import User
 
 from .permissions import (AdminModeratorAuthorOnly, AdminOnly,
                           IsAdminUserOrReadOnly)
-from .serializers import SignUpSerializer, TokenSerializer, UserSerializer
+from .serializers import (ProfileSerializer, SignUpSerializer, TokenSerializer,
+                          UserSerializer)
+
+HTTP_METOD_NAMES = ['get', 'post', 'head', 'delete', 'patch']
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -19,20 +22,8 @@ class UserViewSet(viewsets.ModelViewSet):
     lookup_field = 'username'
     permission_classes = [AdminOnly]
     filter_backends = [filters.SearchFilter]
-    search_fields = ('=username',)
-
-    @action(methods=['PATCH', 'GET'], detail=False,
-            permission_classes=[permissions.IsAuthenticated])
-    def me(self, request):
-        user = self.request.user
-        serializer = self.get_serializer(user)
-        if self.request.method == 'PATCH':
-            serializer = self.get_serializer(
-                user, data=request.data, partial=True
-            )
-            serializer.is_valid(raise_exception=True)
-            serializer.save(role=user.role)
-        return Response(serializer.data)
+    search_fields = ('username',)
+    http_method_names = HTTP_METOD_NAMES
 
 
 @api_view(['POST'])
@@ -67,9 +58,11 @@ def send_confirmation_code(request):
         [email]
     )
     return Response(
-        {'result': 'Код подтверждения успешно отправлен!'},
-        status=status.HTTP_200_OK
-    )
+        {
+            'email': f'{email}',
+            'username': f'{username}'
+        },
+        status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -89,3 +82,17 @@ def get_token(request):
         {'confirmation_code': 'Неверный код подтверждения!'},
         status=status.HTTP_400_BAD_REQUEST
     )
+
+
+@api_view(['GET', 'PATCH'])
+@permission_classes([permissions.AllowAny])
+def profile(request):
+    if not request.user.is_authenticated:
+        return Response('Not authorized', status=status.HTTP_401_UNAUTHORIZED)
+    if request.method == 'GET':
+        serializer = ProfileSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer = ProfileSerializer(request.user, data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_200_OK)

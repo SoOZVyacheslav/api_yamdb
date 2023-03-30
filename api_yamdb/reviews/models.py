@@ -1,18 +1,17 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-ADMIN = 'admin'
-MODERATOR = 'moderator'
-USER = 'user'
-
-USER_ROLES = [
-    (ADMIN, 'ADMIN'),
-    (MODERATOR, 'MODERATOR'),
-    (USER, 'USER'),
-]
-
 
 class User(AbstractUser):
+    ADMIN = 'admin'
+    MODERATOR = 'moderator'
+    USER = 'user'
+    USER_ROLES = [
+        (ADMIN, 'admin'),
+        (MODERATOR, 'moderator'),
+        (USER, 'user'),
+    ]
+
     role = models.CharField(
         choices=USER_ROLES,
         default=USER,
@@ -37,18 +36,7 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+        ordering = ['id']
 
     def __str__(self) -> str:
         return self.username
-
-    @property
-    def is_admin(self):
-        return self.role == 'admin'
-
-    @property
-    def is_moderator(self):
-        return self.role == 'moderator'
-
-    @property
-    def is_user(self):
-        return self.role == 'user'

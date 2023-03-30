@@ -43,17 +43,17 @@ class User(AbstractUser):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=256)
     slug = models.SlugField(unique=True)
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=256)
     slug = models.SlugField(unique=True)
 
 
 class Title(models.Model):
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=256)
     year = models.IntegerField(null=True, blank=True)
     description = models.CharField(max_length=1000, blank=True)
     rating = models.IntegerField(blank=True, null=True)

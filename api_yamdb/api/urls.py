@@ -1,11 +1,17 @@
+
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
-from .views import UserViewSet, get_token, profile, send_confirmation_code
+from .views import (
+    CategoryViewSet, GenreViewSet, TitleViewSet, UserViewSet, get_token,
+    profile, send_confirmation_code,
+)
 
 router_v1 = SimpleRouter()
 router_v1.register('users', UserViewSet)
-
+router_v1.register('categories', CategoryViewSet)
+router_v1.register('genres', GenreViewSet)
+router_v1.register('titles', TitleViewSet)
 
 urlpatterns = [
     path('v1/users/me/', profile),

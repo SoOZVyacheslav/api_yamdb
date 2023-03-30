@@ -17,6 +17,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         if request.user.is_authenticated:
             return bool(request.user.is_staff or request.user.role == 'admin')
 
+
 class AdminOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:

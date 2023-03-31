@@ -1,6 +1,8 @@
+
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
+
 from reviews.models import Category, Comment, Genre, Review, Title, User
 
 
@@ -83,6 +85,7 @@ class GenreField(serializers.SlugRelatedField):
 
 
 class TitleSerializer(serializers.ModelSerializer):
+    rating = serializers.IntegerField()
     category = CategoryField(slug_field='slug',
                              queryset=Category.objects.all(),
                              required=False)
@@ -93,6 +96,21 @@ class TitleSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'year', 'rating', 'description', 'genre',
                   'category',)
         model = Title
+
+
+class TitleCreateSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(
+        slug_field='slug', queryset=Category.objects.all(),
+    )
+    genre = serializers.SlugRelatedField(
+        slug_field='slug', queryset=Genre.objects.all(), many=True
+    )
+
+    class Meta:
+        model = Title
+        fields = (
+            'id', 'name', 'year', 'description', 'genre', 'category'
+        )
 
 
 class ReviewSerializer(serializers.ModelSerializer):

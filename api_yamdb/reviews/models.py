@@ -37,7 +37,7 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-        ordering = ['id']
+        ordering = ('id',)
 
     def __str__(self) -> str:
         return self.username
@@ -47,22 +47,39 @@ class Category(models.Model):
     name = models.CharField(max_length=256)
     slug = models.SlugField(unique=True)
 
+    class Meta:
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.name
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=256)
     slug = models.SlugField(unique=True)
+
+    class Meta:
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.name
 
 
 class Title(models.Model):
     name = models.CharField(max_length=256)
     year = models.IntegerField(null=True, blank=True)
     description = models.CharField(max_length=1000, blank=True)
-    rating = models.IntegerField(blank=True, null=True)
     genre = models.ManyToManyField(Genre, verbose_name='Жанр')
     category = models.ForeignKey(Category,
                                  on_delete=models.SET_NULL,
                                  blank=True, null=True,
                                  verbose_name='Категория')
+
+    class Meta:
+        ordering = ('year',)
+
+    def __str__(self):
+        return self.name
 
 
 class Review(models.Model):
@@ -94,7 +111,7 @@ class Review(models.Model):
     )
 
     class Meta:
-        ordering = ('-pub_date',)
+        ordering = ('pub_date',)
         constraints = (
             models.UniqueConstraint(
                 fields=['title', 'author'],
@@ -103,7 +120,7 @@ class Review(models.Model):
         )
 
     def __str__(self):
-        return f'{self.title}, {self.score}, {self.author}'
+        return self.author.username
 
 
 class Comment(models.Model):
@@ -131,7 +148,7 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
-        ordering = ('-pub_date',)
+        ordering = ('pub_date',)
 
     def __str__(self):
         return self.text

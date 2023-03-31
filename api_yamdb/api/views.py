@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from reviews.models import Category, Genre, Title
 from .serializers import CategorySerializer, TitleSerializer, GenreSerializer
-from .permissions import IsAdminOrReadOnly
+from .permissions import IsAdmin, IsAdminOrReadOnly
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -43,4 +43,4 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     pagination_class = PageNumberPagination
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly, IsAdmin]

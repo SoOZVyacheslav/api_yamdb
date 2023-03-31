@@ -82,7 +82,7 @@ class Title(models.Model):
         return self.name
 
     class Meta:
-        ordering = ('-year', 'name')
+        ordering = ('-year',)
 
 
 class Review(models.Model):
@@ -155,3 +155,14 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class GenreTitle(models.Model):
+    title = models.ForeignKey(
+        Title,
+        on_delete=models.SET_NULL,
+        null=True)
+    genre = models.ForeignKey(
+        Genre,
+        on_delete=models.SET_NULL,
+        null=True)

@@ -82,6 +82,10 @@ class Title(models.Model):
         return self.name
 
 
+    class Meta:
+        ordering = ('-year', 'name')
+
+
 class Review(models.Model):
     text = models.TextField(
         verbose_name='Текст'

@@ -47,10 +47,16 @@ class Category(models.Model):
     name = models.CharField(max_length=256)
     slug = models.SlugField(unique=True)
 
+    class Meta:
+        ordering = ('name',)
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=256)
     slug = models.SlugField(unique=True)
+
+    class Meta:
+        ordering = ('name',)
 
 
 class Title(models.Model):
@@ -63,6 +69,10 @@ class Title(models.Model):
                                  on_delete=models.SET_NULL,
                                  blank=True, null=True,
                                  verbose_name='Категория')
+
+
+    class Meta:
+        ordering = ('-year', 'name')
 
 
 class Review(models.Model):

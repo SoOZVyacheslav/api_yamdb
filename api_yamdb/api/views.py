@@ -10,7 +10,7 @@ from rest_framework_simplejwt.tokens import AccessToken
 from reviews.models import Category, Genre, Review, Title, User
 
 from .permissions import (AdminModeratorAuthorOnly, AdminOnly,
-                          IsAdminUserOrReadOnly)
+                          IsAdminUserOrReadOnly, IsAdminOrReadOnly)
 from .serializers import (CategorySerializer, CommentSerializer,
                           GenreSerializer, ProfileSerializer, ReviewSerializer,
                           SignUpSerializer, TitleSerializer, TokenSerializer,
@@ -137,7 +137,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     pagination_class = PageNumberPagination
-    permission_classes = [IsAdminUserOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly, AdminOnly]
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

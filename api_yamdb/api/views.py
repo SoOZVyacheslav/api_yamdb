@@ -13,6 +13,7 @@ from rest_framework_simplejwt.tokens import AccessToken
 from reviews.models import Category, Genre, Review, Title, User
 
 from .filters import Filter
+from .mixins import ListCreateDestroyViewSet
 from .permissions import (AdminModeratorAuthorOnly, AdminOnly,
                           AdminUserOrReadOnly)
 from .serializers import (CategorySerializer, CommentSerializer,
@@ -38,8 +39,8 @@ class UserViewSet(viewsets.ModelViewSet):
 def send_confirmation_code(request):
     serializer = SignUpSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    username = request.data['username']
-    email = request.data['email']
+    username = serializer.validated_data['username']
+    email = serializer.validated_data['email']
     username_exists = User.objects.filter(username=username).exists()
     email_exists = User.objects.filter(email=email).exists()
     if not username_exists and not email_exists:
@@ -66,8 +67,8 @@ def send_confirmation_code(request):
     )
     return Response(
         {
-            'email': f'{email}',
-            'username': f'{username}'
+            'email': email,
+            'username': username,
         },
         status=status.HTTP_200_OK)
 
@@ -77,7 +78,7 @@ def send_confirmation_code(request):
 def get_token(request):
     serializer = TokenSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    username = request.data['username']
+    username = serializer.validated_data['username']
     user = get_object_or_404(User, username=username)
     generator = PasswordResetTokenGenerator()
     if generator.check_token(user, request.data['confirmation_code']):
@@ -105,7 +106,7 @@ def profile(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(ListCreateDestroyViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [AdminUserOrReadOnly]
@@ -113,26 +114,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
     search_fields = ['name', ]
     lookup_field = 'slug'
 
-    def retrieve(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    def update(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-
-class GenreViewSet(viewsets.ModelViewSet):
+class GenreViewSet(ListCreateDestroyViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = [AdminUserOrReadOnly]
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
     lookup_field = 'slug'
-
-    def retrieve(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def update(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class TitleViewSet(viewsets.ModelViewSet):

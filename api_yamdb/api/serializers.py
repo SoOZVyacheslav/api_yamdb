@@ -1,4 +1,3 @@
-
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -108,9 +107,7 @@ class TitleCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Title
-        fields = (
-            'id', 'name', 'year', 'description', 'genre', 'category'
-        )
+        fields = '__all__'
 
 
 class ReviewSerializer(serializers.ModelSerializer):

@@ -1,8 +1,7 @@
 from django.contrib import admin
 
+from .const import EMPTY_VALUE
 from .models import Category, Comment, Genre, Review, Title, User
-
-EMPTY_VALUE = '-пусто-'
 
 
 @admin.register(User)

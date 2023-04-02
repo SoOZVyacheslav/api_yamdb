@@ -5,12 +5,17 @@ User = get_user_model()
 
 
 class AdminOnly(permissions.BasePermission):
+    """Класс для доступа к изменению контента.
+    Права имеют только администраторы."""
     def has_permission(self, request, view):
         if request.user.is_authenticated:
             return bool(request.user.is_staff or request.user.role == 'admin')
 
 
 class AdminUserOrReadOnly(permissions.BasePermission):
+    """Класс для доступа к изменению контента.
+    Права имеют только администраторы, и авторизованые пользователи,
+    читать контент могут все."""
     def has_permission(self, request, view):
         return (request.method in permissions.SAFE_METHODS
                 or (request.user.is_authenticated and (
@@ -19,6 +24,8 @@ class AdminUserOrReadOnly(permissions.BasePermission):
 
 
 class AdminModeratorAuthorOnly(permissions.BasePermission):
+    """Класс для доступа к изменению контента.
+    Права имеют только администраторы, модераторы и авторы."""
     def has_permission(self, request, view):
         return (request.method in permissions.SAFE_METHODS
                 or request.user.is_authenticated)

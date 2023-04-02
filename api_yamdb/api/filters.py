@@ -5,6 +5,8 @@ from reviews.models import Title
 
 
 class Filter(filters.FilterSet):
+    """Фильтр по полям произведений: год, категории, жанр, имя.
+    Регистрозависимый."""
     year = CharFilter(field_name='year',)
     category = CharFilter(field_name='category__slug', lookup_expr='contains')
     genre = CharFilter(field_name='genre__slug', lookup_expr='contains')

@@ -64,6 +64,6 @@
 #### Полный список запросов API находятся в документации
 ``` http://127.0.0.1:8000/redoc/ ```
 #### Авторы
-Вячеслав Костырка - [https://github.com/SoOZVyacheslav](http://github.com/VladimirMonolith)     
+Вячеслав Костырка - [https://github.com/SoOZVyacheslav](https://github.com/SoOZVyacheslav)     
 Артём Михайлов - [https://github.com/temamx](https://github.com/temamx)   
 Абабков Артемий - [https://github.com/Kocho08](https://github.com/Kocho08)
